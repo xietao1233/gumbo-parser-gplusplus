@@ -5,7 +5,10 @@ cc = g++
 compileoption = -g -Wall -std=c++11
 
 testparser : $(objects)
-	$(cc) -o testparser $(objects) $(compileoption)
+	$(cc) -o testparser $(objects)
+
+main.o :
+	$(cc) -c main.cpp $(compileoption)
 
 .PHONY : clean
 clean : 
