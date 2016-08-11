@@ -107,7 +107,7 @@ const char* utf8iterator_get_end_pointer(const Utf8Iterator* iter);
 // length 'length'), consume it and return true.  Otherwise, return false with
 // no other effects.  If the length of the string would overflow the buffer,
 // this returns false.  Note that prefix should not contain null bytes because
-// of the use of strncmp/_strnicmp internally.  All existing use-cases adhere
+// of the use of strncmp/strncasecmp internally.  All existing use-cases adhere
 // to this.
 bool utf8iterator_maybe_consume_match(
     Utf8Iterator* iter, const char* prefix, size_t length, bool case_sensitive);

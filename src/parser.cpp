@@ -414,7 +414,7 @@ static bool token_has_attribute(const GumboToken* token, const char* name) {
 static bool attribute_matches(
     const GumboVector* attributes, const char* name, const char* value) {
   const GumboAttribute* attr = gumbo_get_attribute(attributes, name);
-  return attr ? _stricmp(value, attr->value) == 0 : false;
+  return attr ? strcasecmp(value, attr->value) == 0 : false;
 }
 
 // Checks if the value of the specified attribute is a case-sensitive match
@@ -549,7 +549,7 @@ static bool is_in_static_list(
     const char* needle, const GumboStringPiece* haystack, bool exact_match) {
   for (unsigned int i = 0; haystack[i].length > 0; ++i) {
     if ((exact_match && !strcmp(needle, haystack[i].data)) ||
-        (!exact_match && !_stricmp(needle, haystack[i].data))) {
+        (!exact_match && !strcasecmp(needle, haystack[i].data))) {
       return true;
     }
   }
@@ -1546,7 +1546,7 @@ static GumboInsertionMode get_current_template_insertion_mode(
   if (template_insertion_modes->length == 0) {
     return GUMBO_INSERTION_MODE_INITIAL;
   }
-  return (GumboInsertionMode)((unsigned int)template_insertion_modes->data[(template_insertion_modes->length - 1)]);
+  return (GumboInsertionMode)((unsigned long)template_insertion_modes->data[(template_insertion_modes->length - 1)]);
 }
 
 // http://www.whatwg.org/specs/web-apps/current-work/multipage/tree-construction.html#mathml-text-integration-point

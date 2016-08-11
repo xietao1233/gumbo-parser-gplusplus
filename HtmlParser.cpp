@@ -45,7 +45,7 @@ std::vector<GumboNode*> CHtmlParser::GetNodeByAttribute(GumboNode* root_node, un
 				for (unsigned int i = 0; i < root_node->v.element.attributes.length; i++)
 				{
 					current_attribute = (GumboAttribute*)root_node->v.element.attributes.data[i];
-					if (!_stricmp(attribute_name.c_str(), current_attribute->name) && !_stricmp(attribute_value.c_str(), current_attribute->value))
+					if (!strcasecmp(attribute_name.c_str(), current_attribute->name) && !strcasecmp(attribute_value.c_str(), current_attribute->value))
 						result.push_back(root_node);
 				}
 			}

@@ -4,39 +4,37 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <codecvt>
+#include <locale>
 #include "HtmlParser.h"
 
 #include "./src/gumbo.h"
 
 
-std::string OutputConsole(const char* pUtf8)
+std::string utf8_to_gb2312(std::string const &strUtf8)
 {
-	std::string result;
-	size_t uSize = 0;
-	wchar_t* pUnicode = NULL; 
-	char* pAnsi = NULL;
+	std::wstring_convert<std::codecvt_utf8<wchar_t>> cutf8;
+	std::wstring wTemp = cutf8.from_bytes(strUtf8);
+#ifdef _MSC_VER
+	std::locale loc("zh-CN");
+#else
+	std::locale loc("zh_CN.GB18030");
+#endif
+	const wchar_t* pwszNext = nullptr;
+	char* pszNext = nullptr;
+	mbstate_t state = {};
 
-	uSize = MultiByteToWideChar(CP_UTF8, 0, pUtf8, -1, (wchar_t*)NULL, 0);
-	if (uSize)
+	std::vector<char> buff(wTemp.size() * 2);
+	int res = std::use_facet<std::codecvt<wchar_t, char, mbstate_t> >
+		(loc).out(state,
+			wTemp.data(), wTemp.data() + wTemp.size(), pwszNext,
+			buff.data(), buff.data() + buff.size(), pszNext);
+
+	if (std::codecvt_base::ok == res)
 	{
-		pUnicode = new wchar_t[uSize];
-
-		MultiByteToWideChar(CP_UTF8, 0, pUtf8, -1, (wchar_t*)pUnicode, uSize);
-		uSize = WideCharToMultiByte(CP_ACP, 0, pUnicode, -1, (char*)NULL, 0, NULL, nullptr);
-		if (uSize)
-		{
-			pAnsi = new char[uSize];
-
-			WideCharToMultiByte(CP_ACP, 0, pUnicode, -1, pAnsi, uSize, NULL, nullptr);
-			result = pAnsi;
-
-			delete[] pAnsi;
-		}
-
-		delete[] pUnicode;
+		return std::string(buff.data(), pszNext);
 	}
-
-	return result;
+	return "";
 }
 
 int main(int argc, const char** argv) {
@@ -71,7 +69,7 @@ int main(int argc, const char** argv) {
 		for (unsigned int i = 0; i < title_child->v.element.attributes.length; i++)
 		{
 			attri = (GumboAttribute*)title_child->v.element.attributes.data[i];
-			std::cout << OutputConsole(attri->name) << ": " << OutputConsole(attri->value) << std::endl;
+			std::cout << utf8_to_gb2312(attri->name) << ": " << utf8_to_gb2312(attri->value) << std::endl;
 		}
 	}
 

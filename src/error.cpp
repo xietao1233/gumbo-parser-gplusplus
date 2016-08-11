@@ -78,7 +78,7 @@ static void print_tag_stack(GumboParser* parser, const GumboParserError* error,
     if (i) {
       print_message(parser, output, ", ");
     }
-    GumboTag tag = (GumboTag)((unsigned int)error->tag_stack.data[i]);
+    GumboTag tag = (GumboTag)((unsigned long)error->tag_stack.data[i]);
     print_message(parser, output, gumbo_normalized_tagname(tag));
   }
   gumbo_string_buffer_append_codepoint(parser, '.', output);

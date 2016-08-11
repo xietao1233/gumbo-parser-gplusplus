@@ -35,7 +35,7 @@ bool gumbo_string_equals(
 bool gumbo_string_equals_ignore_case(
     const GumboStringPiece* str1, const GumboStringPiece* str2) {
   return str1->length == str2->length &&
-         !_strnicmp(str1->data, str2->data, str1->length);
+         !strncasecmp(str1->data, str2->data, str1->length);
 }
 
 void gumbo_string_copy(struct GumboInternalParser* parser,

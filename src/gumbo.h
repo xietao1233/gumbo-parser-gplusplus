@@ -149,7 +149,7 @@ int gumbo_vector_index_of(GumboVector* vector, const void* element);
  * name can be obtained through original_tag.
  *
  * This is mostly for API convenience, so that clients of this library don't
- * need to perform a _stricmp to find the normalized tag name.  It also has
+ * need to perform a strcasecmp to find the normalized tag name.  It also has
  * efficiency benefits, by letting the parser work with enums instead of
  * strings.
  */
