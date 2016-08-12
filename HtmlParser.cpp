@@ -5,6 +5,7 @@
 #include <vector>
 #include <algorithm>
 #include <iterator>
+#include <map>
 
 
 CHtmlParser::CHtmlParser(char* html_content, size_t html_length/*UTF-8*/)
@@ -68,6 +69,37 @@ std::vector<GumboNode*> CHtmlParser::GetNodeByAttribute(GumboNode* root_node, un
 		}
 	}
 	catch (std::exception &e)
+	{
+		throw e;
+	}
+
+	return result;
+}
+
+std::map<std::string, std::string> CHtmlParser::GetHtmlNavigation(unsigned int tag_type, std::string attribute_name, std::string attribute_value/*, unsigned int node_type = GUMBO_NODE_ELEMENT*/)
+{
+	std::map<std::string, std::string> result;
+	std::vector<GumboNode*> findNavi;
+	GumboNode* childNode=0;
+	std::string url,name;
+
+	try
+	{
+		findNavi = GetNodeByAttribute(0, tag_type, GUMBO_NODE_ELEMENT, attribute_name, attribute_value);
+		for (unsigned int i=0; i<findNavi.size(); i++)
+		{
+			if (findNavi[i] && findNavi[i]->v.element.children.length)
+			{
+				childNode=(GumboNode*)findNavi[i]->v.element.children.data[0];
+				if (childNode)
+				{
+
+				}
+			}
+			//result.insert(std::make_pair())
+		}
+	}
+	catch(std::exception &e)
 	{
 		throw e;
 	}
