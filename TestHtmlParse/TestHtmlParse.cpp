@@ -10,6 +10,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sstream>
 
 #include "HtmlParser.h"
 
@@ -57,8 +58,10 @@ int main(int argc, const char** argv) {
 		exit(EXIT_FAILURE);
 	}
 
-	// GumboNode* title_child = nullptr;
-	// GumboAttribute* attri = nullptr;
+	std::ostringstream oos;
+	HTMLNODE RootInfo = { GUMBO_TAG_DIV,"class","nav" };
+	HTMLNODE FindInfo = { GUMBO_TAG_LI ,"","" };
+	//HTMLNODE FindInfo = { GUMBO_TAG_SPAN ,"class","cate-sub-title" };
 	char* input;
 	fseek(fp, 0, SEEK_END);
 	int input_length = ftell(fp);
@@ -67,21 +70,18 @@ int main(int argc, const char** argv) {
 	fread(input, 1, input_length, fp);
 
 	CHtmlParser parser(input, input_length);
-	// std::vector<GumboNode*> title = parser.GetNodeByAttribute(nullptr, GUMBO_TAG_DIV/*, GUMBO_NODE_ELEMENT, std::string("class"), std::string("right zxgx")*/);
 
-	// for (unsigned int i=0;i<title.size();i++)
-	// {
-	// 	title_child = title[i];
-	// 	std::cout<<std::endl<<"[ Html node ] : "<<i<<std::endl;
-	// 	for (unsigned int i = 0; i < title_child->v.element.attributes.length; i++)
-	// 	{
-	// 		attri = (GumboAttribute*)title_child->v.element.attributes.data[i];
-	// 		std::cout << OutputConsole(attri->name) << ": " << OutputConsole(attri->value) << std::endl;
-	// 	}
-	// }
-	auto find = parser.GetHtmlNavigation(GUMBO_TAG_SPAN, std::string("class"), std::string("cate-sub-title"));
+	auto find = parser.GetHtmlNavigation(&RootInfo, &FindInfo);
+	for each(auto& item in find)
+	{
+		oos << item.first << " : " << item.second << std::endl;
+	}
 
 	delete[] input;
+
+	std::cout << oos.str().c_str() << std::endl;
+
+	getchar();
 
 	return 0;
 }
